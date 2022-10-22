@@ -78,7 +78,7 @@ outdf$KDEclass <- ifelse(outdf$kap.prop>0.3,"deterministic","stochastic")
 write.csv(outdf,"reproduce_gpdd_results.csv", row.names = F)
 
 # ***compare to existing results
-S1 <- read.csv("Dataset S1.csv",skip = 1)
+S1 <- read.csv("Dataset S1.csv",skip = 1, na.strings = "NaN")
 colnames(S1)[1] <- "MainID"
 colnames(S1)[8] <- "adjpchaos"
 
