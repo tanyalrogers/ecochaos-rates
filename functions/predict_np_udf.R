@@ -2,7 +2,7 @@
 # After Huffaker, Bittelli & Rosa (2017) Nonlinear Time Series Analysis with R, 
 # Oxford University Press, pp. 154-174.
 
-predict_np_udf <- function(Mx,frac.learn){
+predict_np_udf <- function(Mx,m,frac.learn){
   #Step 2a: Partition Mx into learning and test sets
   frac.learn<-0.5 #fraction in learning set
   learn.rows<-round(frac.learn*nrow(Mx))
@@ -69,7 +69,7 @@ predict_np_udf <- function(Mx,frac.learn){
   results<-list(nse,hold.test,hold.pred)
   return(results)
 } #end function
-results.np<-predict_np_udf(Mx,frac.learn=0.5)
-nse<-results.np[[1]]
-test<-results.np[[2]]
-prediction<-results.np[[3]]
+# results.np<-predict_np_udf(Mx,frac.learn=0.5)
+# nse<-results.np[[1]]
+# test<-results.np[[2]]
+# prediction<-results.np[[3]]
