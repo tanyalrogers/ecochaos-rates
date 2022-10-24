@@ -80,7 +80,7 @@ write.csv(outdf,"reproduce_gpdd_results.csv", row.names = F)
 # ***compare to existing results
 S1 <- read.csv("Dataset S1.csv",skip = 1, na.strings = "NaN")
 colnames(S1)[1] <- "MainID"
-colnames(S1)[8] <- "adjpchaos"
+colnames(S1)[ncol(S1)] <- "adjpchaos"
 
 outdf2 <- dplyr::left_join(outdf, S1, by="MainID")
 outdf3 <- outdf2[,c("MainID","NPE.x","NPE.y","NPEclass","NPE.class","KDEclass","KDE.class","kap.prop")]
