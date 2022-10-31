@@ -12,30 +12,30 @@
 #
 # Erik Tihelka, 2022
 
+source('functions/predict_np_udf.R')
+
 npe_heuristic <- function(x) {
-  source(here::here('predict_np_udf.R'))
   x <- unlist(x)
   x <- na.omit(x)
   
   #Embedding dimension: 2
   Mx <- embed(x, dimension = 2)
-  source(here::here('predict_np_udf.R'))
-  results.np<-predict_np_udf(Mx,frac.learn=0.5)
+  results.np<-predict_np_udf(Mx,2,frac.learn=0.5)
   npe02<-results.np[[1]]
   
   #Embedding dimension: 5
   Mx <- embed(x, dimension = 5)
-  results.np<-predict_np_udf(Mx,frac.learn=0.5)
+  results.np<-predict_np_udf(Mx,5,frac.learn=0.5)
   npe05<-results.np[[1]]
   
   #Embedding dimension: 10
   Mx <- embed(x, dimension = 10)
-  results.np<-predict_np_udf(Mx,frac.learn=0.5)
+  results.np<-tryCatch(predict_np_udf(Mx,10,frac.learn=0.5), error=function(err) NA)
   npe10<-results.np[[1]]
   
   #Embedding dimension: 15
   Mx <- embed(x, dimension = 15)
-  results.np<-predict_np_udf(Mx,frac.learn=0.5)
+  results.np<-tryCatch(predict_np_udf(Mx,15,frac.learn=0.5), error=function(err) NA)
   npe15<-results.np[[1]]
   
   # Mean across the five embedding dimensions

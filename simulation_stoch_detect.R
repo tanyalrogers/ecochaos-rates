@@ -6,7 +6,6 @@
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(here, dplyr, tidyr, tibble, purrr, rpatrec, Chaos01, rdist, spam,  
                nonlinearTseries, stats, rdist, fields, viridis, viridisLite, readr)
-here::i_am("simulation_stoch_detect.R")
 # rpatrec version 1.0.1 doesn't work in some of the latest installments of R.
 # This script was written and tested in R version 4.1.2 (Bird Hippie).
 
@@ -31,22 +30,34 @@ sim <- sim %>%
     TRUE ~ NA_character_),   # classify map dynamics
     classification = factor(classification, levels = c("chaotic", 
                                                        "nonlinear_stochastic", 
-                                                       "nonlienar_periodic"))) %>%
-  add_column(maps = NA)      # empty column for simulated time series
+                                                       "nonlienar_periodic")),
+    maps = NA)     # empty column for simulated time series
 
 
 # Generate simulated series
-source(here("nonLinearMaps.R"))
+source("functions/nonLinearMaps.R")
 
 sim <- sim %>% 
   mutate(maps = invoke_map(model, length, noise.level)) %>% 
   unnest(maps) # note that some randomly generated initial values may lead to an
 # unstable system that will tend to infinity
 
+#plot the time series
+par(mfrow=c(3,2))
+test=filter(sim, length==25 & noise.level==0)
+for(i in 1:nrow(test)) {
+  plot(test$maps[[i]], type="o", ylab="value",
+       main=paste(test$model[i],test$classification[i],"\nNoise = ",test$noise.level[i]))
+}
+test=filter(sim, length==25 & noise.level==1)
+for(i in 1:nrow(test)) {
+  plot(test$maps[[i]], type="o", ylab="value",
+       main=paste(test$model[i],test$classification[i],"\nNoise = ",test$noise.level[i]))
+}
 
 # Run analyses on simulated series
-source(here::here('predict_np_udf.R'))
-source(here::here('npe_heuristic_udf.R'))
+source('functions/predict_np_udf.R')
+source('functions/npe_heuristic_udf.R')
 
 sim <- sim %>% 
   rowwise %>% 
@@ -54,6 +65,10 @@ sim <- sim %>%
   mutate(ZeroOneTest = list(testChaos01(as.numeric(maps)))) %>% # 0-1 test for chaos
   mutate(NPE = list(npe_heuristic(maps))) # nonlinear prediction skill
 
+sim$NPEclass=ifelse(sim$NPE>0.65,"deterministic","stochastic")
+table(sim$NPEclass, sim$classification, useNA = "i")
+#FPR comes from stoch series classified as det (which were all sine map, which is actually periodic), 
+# excluding NAs (also only in sine map)
 
 # Save output file
 saveRDS(sim, "simulations_stoch.rds") # save as R data file

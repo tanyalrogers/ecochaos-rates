@@ -25,7 +25,7 @@ function(x){
   # neighbours test
   #Step 2a: Autocorrelation function
   lag.max=100
-  acf.run<-acf(x,lag.max)
+  acf.run<-acf(x,lag.max,plot = F)
   acf.out<-acf.run$acf #array of acf values 
   #Step 2b: Use embedding approach to calculate delay at which AMI hits 
   #its first minimum.
