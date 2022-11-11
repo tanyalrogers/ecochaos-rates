@@ -12,12 +12,20 @@ S1$adjpchaos2 = NA #reproduce results with incorrect LE results
 S1$adjpchaos_correct = NA #use correct LE results
 S1$adjpchaos_nost = NA #use only chaos tests, no 'stoch' results
 
+# rates from all simulated datasets
 LE = c(sensitivity = 1-0.29, specificity = 1-0.04, outcome = NA)
 RQA = c(sensitivity = 1-0.37, specificity = 1-0.13, outcome = NA)
 PE = c(sensitivity = 1-0.26, specificity = 1-0.18, outcome = NA)
+# rates from tihelka (I think these include the periodic series)
 #outcome = 0 if 'stochastic', omit test if 'determinsitic' or NA
-NPE = c(sensitivity = 1-0.05, specificity = 1-0.30, outcome = NA)
-KDE = c(sensitivity = 1-0.30, specificity = 1-0.13, outcome = NA)
+# NPE = c(sensitivity = 1-0.05, specificity = 1-0.30, outcome = NA)
+# KDE = c(sensitivity = 1-0.30, specificity = 1-0.13, outcome = NA)
+# rates from tihelka with bug fix
+NPE = c(sensitivity = 1-0.32, specificity = 1-0.28, outcome = NA)
+KDE = c(sensitivity = 1-0.27, specificity = 1-0.58, outcome = NA)
+# rates from simulated test dataset (first 10 reps, excluding periodic)
+# NPE = c(sensitivity = 1-0.40, specificity = 1-0.55, outcome = NA)
+# KDE = c(sensitivity = 1-0.175, specificity = 1-0.085, outcome = NA)
 
 test.info.mat = data.frame(LE = LE, RQA = RQA, PE = PE, NPE = NPE, KDE= KDE)
 
